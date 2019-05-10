@@ -1,0 +1,56 @@
+require_relative '../Assignment 7/Loginator'
+
+class A
+  include Loginator
+
+  def create_method(name, &block)
+    self.class.send(:define_method, name, &block)
+  end
+
+  def add(a, b)
+    a + b
+  end
+
+  def sub(a, b)
+    a - b
+  end
+end
+
+def leet_class(andereClass)
+  andereClass.instance_methods(false).each do |m|
+    name = m.to_s
+    leet_name = to_leet(name).to_sym
+    puts leet_name
+    andereClass.define_method(leet_name) do |*p|
+    end
+  end
+end
+
+def create_class(super_class)
+  Class.new(super_class) do
+    def who_am_i
+      puts "#{self.class} ist ein Kind von #{self.class.superclass}"
+    end
+  end
+end
+
+Class2 = create_class(A)
+t = Class2.new
+t.who_am_i
+
+analyse(A)
+
+
+module Loginator
+  def self.logging(name, *args, **keywords, &block)
+    puts "Aufruf von Methode '#{name}'"
+    puts "   mit den Argumenten #{args}"
+    puts "   mit den Argumenten #{keywords}"
+    puts "   und dem Block #{block}"
+  end
+end
+
+def analyse(object)
+  puts "Instanz-Methoden:   #{object.instance_methods}"
+  puts "Statische-Methoden: #{object.singleton_methods}"
+end
